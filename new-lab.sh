@@ -98,8 +98,8 @@ tags: [${platform_tag}, ${os_tag}, ${diff_tag}]
 - **Date Started:** ${current_date}
 
 ## Links
-- **Techniques Used:** 
-- **Tools Used:** 
+- **Techniques Used:**
+- **Tools Used:**
 
 ---
 
@@ -114,7 +114,7 @@ tags: [${platform_tag}, ${os_tag}, ${diff_tag}]
 \`\`\`
 
 **Findings:**
-- 
+-
 
 ---
 
@@ -146,11 +146,6 @@ nmap -sU --top-ports 20 -oA UDPScan ${target_ip}
 
 \`\`\`
 
-**Open Ports:**
-
-| Port | Service | Version |
-|------|---------|---------|
-|      |         |         |
 
 ### Service Enumeration
 
@@ -163,15 +158,15 @@ nmap -sU --top-ports 20 -oA UDPScan ${target_ip}
 \`\`\`
 
 **Findings:**
-- 
+-
 
 ---
 
 ## Initial Access
 
 ### Vulnerability
-- **Type:** 
-- **Description:** 
+- **Type:**
+- **Description:**
 
 ### Exploitation
 
@@ -182,8 +177,8 @@ nmap -sU --top-ports 20 -oA UDPScan ${target_ip}
 \`\`\`
 
 **Shell Access:**
-- User: 
-- Method: 
+- User:
+- Method:
 
 ---
 
@@ -198,8 +193,8 @@ nmap -sU --top-ports 20 -oA UDPScan ${target_ip}
 \`\`\`
 
 ### Method
-- **Technique:** 
-- **Description:** 
+- **Technique:**
+- **Description:**
 
 ### Exploitation
 
@@ -220,9 +215,9 @@ nmap -sU --top-ports 20 -oA UDPScan ${target_ip}
 
 ## Key Takeaways
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ---
 
@@ -232,7 +227,7 @@ nmap -sU --top-ports 20 -oA UDPScan ${target_ip}
 ---
 
 ## References
-- 
+-
 EOF
 
 echo -e "\n${GREEN}✓ Lab note created successfully!${NC}"
