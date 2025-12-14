@@ -8,8 +8,22 @@ NC='\033[0m'
 
 echo -e "${GREEN}=== New Lab Note Generator ===${NC}\n"
 
-# Machine Name
-read -p "Machine Name: " machine_name
+# Room Name
+read -p "Room Name: " room_name
+
+# Difficulty
+echo -e "\n${BLUE}Difficulty:${NC}"
+echo "1) Easy"
+echo "2) Medium"
+echo "3) Hard"
+read -p "Select (1-4): " diff_choice
+
+case $diff_choice in
+    1) difficulty="Easy" ;;
+    2) difficulty="Medium" ;;
+    3) difficulty="Hard" ;;
+    4) difficulty="Insane" ;;
+esac
 
 # Platform
 echo -e "\n${BLUE}Platform:${NC}"
@@ -20,216 +34,153 @@ echo "4) Other"
 read -p "Select (1-4): " platform_choice
 
 case $platform_choice in
-    1) platform="HTB"; platform_tag="htb" ;;
-    2) platform="TryHackMe"; platform_tag="thm" ;;
-    3) platform="VulnHub"; platform_tag="vulnhub" ;;
-    4) read -p "Enter platform: " platform; platform_tag=$(echo "$platform" | tr '[:upper:]' '[:lower:]') ;;
+    1) platform="HTB" ;;
+    2) platform="TryHackMe" ;;
+    3) platform="VulnHub" ;;
+    4) read -p "Enter platform: " platform ;;
 esac
-
-# OS
-echo -e "\n${BLUE}Operating System:${NC}"
-echo "1) Linux"
-echo "2) Windows"
-echo "3) Other"
-read -p "Select (1-3): " os_choice
-
-case $os_choice in
-    1) os="Linux"; os_tag="linux" ;;
-    2) os="Windows"; os_tag="windows" ;;
-    3) read -p "Enter OS: " os; os_tag=$(echo "$os" | tr '[:upper:]' '[:lower:]') ;;
-esac
-
-# Difficulty
-echo -e "\n${BLUE}Difficulty:${NC}"
-echo "1) Easy"
-echo "2) Medium"
-echo "3) Hard"
-echo "4) Insane"
-read -p "Select (1-4): " diff_choice
-
-case $diff_choice in
-    1) difficulty="Easy"; diff_tag="easy" ;;
-    2) difficulty="Medium"; diff_tag="medium" ;;
-    3) difficulty="Hard"; diff_tag="hard" ;;
-    4) difficulty="Insane"; diff_tag="insane" ;;
-esac
-
-# Target IP (optional)
-read -p "Target IP (press Enter to skip): " target_ip
-target_ip=${target_ip:-"TARGET_IP"}
 
 # Get current date
 current_date=$(date +"%Y-%m-%d")
 
-# Create Labs directory if it doesn't exist
-mkdir -p Labs
+# Sanitize folder name
+foldername=$(echo "$room_name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+folderpath="Labs/${foldername}"
 
-# Sanitize filename
-filename=$(echo "$machine_name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
-filepath="Labs/${filename}.md"
-
-# Check if file exists
-if [ -f "$filepath" ]; then
-    read -p "${YELLOW}File already exists. Overwrite? (y/n): ${NC}" overwrite
+# Check if folder exists
+if [ -d "$folderpath" ]; then
+    read -p "${YELLOW}Folder already exists. Overwrite? (y/n): ${NC}" overwrite
     if [[ ! "$overwrite" =~ ^[Yy]$ ]]; then
         echo "Aborting..."
         exit 0
     fi
+    rm -rf "$folderpath"
 fi
 
-# Create the markdown file
-cat > "$filepath" <<EOF
----
-platform: ${platform}
-os: ${os}
-difficulty: ${difficulty}
-date: ${current_date}
-status: active
-tags: [${platform_tag}, ${os_tag}, ${diff_tag}]
----
+# Create folder structure
+mkdir -p "$folderpath"
 
-# ${machine_name}
+# Create README.md
+cat > "$folderpath/README.md" <<EOF
+# ${room_name}
 
-## Machine Info
-- **Platform:** ${platform}
-- **OS:** ${os}
-- **Difficulty:** ${difficulty}
-- **Target IP:** ${target_ip}
-- **Date Started:** ${current_date}
-
-## Links
-- **Techniques Used:**
-- **Tools Used:**
+**Difficulty:** ${difficulty}  
+**Platform:** ${platform}  
+**Date:** ${current_date}
 
 ---
 
-## Reconnaissance
+## Overview
 
-### Initial Scans
 
-\`\`\`bash
-
-# Add reconnaissance commands
-
-\`\`\`
-
-**Findings:**
--
 
 ---
 
-## Enumeration
+## Phases
 
-### Nmap Results
-
-#### Default Scan
-
-\`\`\`bash
-
-nmap -sC -sV -oA InitialScan ${target_ip}
-
-\`\`\`
-
-#### All Ports Scan
-
-\`\`\`bash
-
-nmap -sC -sV -p- --min-rate 5000 -T4 -Pn -oA AllScan ${target_ip}
-
-\`\`\`
-
-#### UDP Scan
-
-\`\`\`bash
-
-nmap -sU --top-ports 20 -oA UDPScan ${target_ip}
-
-\`\`\`
-
-
-### Service Enumeration
-
-#### Port XX - Service
-
-\`\`\`bash
-
-# Enumeration commands
-
-\`\`\`
-
-**Findings:**
--
+- [[Recon]]
+- [[Enumeration]]
+- [[Foothold]]
+- [[Post-Exploitation]]
+- [[Privilege-Escalation]]
 
 ---
 
-## Initial Access
+## Tools Used
 
-### Vulnerability
-- **Type:**
-- **Description:**
-
-### Exploitation
-
-\`\`\`bash
-
-# Exploitation steps
-
-\`\`\`
-
-**Shell Access:**
-- User:
-- Method:
+- 
 
 ---
 
-## Privilege Escalation
+## Techniques Used
 
-### Enumeration
-
-\`\`\`bash
-
-# Privilege escalation enumeration
-
-\`\`\`
-
-### Method
-- **Technique:**
-- **Description:**
-
-### Exploitation
-
-\`\`\`bash
-
-# Commands executed
-
-\`\`\`
+- 
 
 ---
 
 ## Flags
 
-- **User Flag:** \`\`
-- **Root Flag:** \`\`
+**User Flag:** \`\`  
+**Root Flag:** \`\`
 
 ---
 
 ## Key Takeaways
 
-1.
-2.
-3.
+1. 
+2. 
+3. 
 
----
-
-## Related Boxes
-- [[]]
-
----
-
-## References
--
 EOF
 
-echo -e "\n${GREEN}✓ Lab note created successfully!${NC}"
-echo -e "Location: ${YELLOW}$filepath${NC}"
-echo -e "\n${BLUE}Open it in Obsidian to start taking notes!${NC}"
+# Create phase files
+cat > "$folderpath/Recon.md" <<EOF
+# NMAP
+
+##### Default Scan
+
+\`\`\`bash
+sudo nmap -sC -sV -oN DefaultScan.txt -Pn 
+\`\`\`
+
+##### Full Scan
+
+\`\`\`bash
+sudo nmap -sV -p- --min-rate 5000 -T4 -Pn -oA FullScan.txt
+\`\`\`
+
+##### UDP Scan
+
+\`\`\`bash
+sudo nmap -sU --top-ports 20 -Pn -oN UDPScan.txt
+\`\`\`
+
+#### Findings
+
+
+
+EOF
+
+cat > "$folderpath/Enumeration.md" <<EOF
+# Port X - Service
+
+\`\`\`bash
+
+\`\`\`
+
+# Port X - Service
+
+\`\`\`bash
+
+\`\`\`
+
+# Port X - Service
+
+\`\`\`bash
+
+\`\`\`
+
+EOF
+
+cat > "$folderpath/Foothold.md" <<EOF
+
+EOF
+
+cat > "$folderpath/Post-Exploitation.md" <<EOF
+
+EOF
+
+cat > "$folderpath/Privilege-Escalation.md" <<EOF
+
+EOF
+
+echo -e "\n${GREEN}✓ Lab folder created successfully!${NC}"
+echo -e "Location: ${YELLOW}$folderpath${NC}"
+echo -e "\n${BLUE}Files created:${NC}"
+echo -e "  - README.md"
+echo -e "  - Recon.md"
+echo -e "  - Enumeration.md"
+echo -e "  - Foothold.md"
+echo -e "  - Post-Exploitation.md"
+echo -e "  - Privilege-Escalation.md"
+echo -e "\n${BLUE}Open the folder in Obsidian to start taking notes!${NC}"
