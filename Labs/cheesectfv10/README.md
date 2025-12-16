@@ -15,7 +15,7 @@ Inspired by the great cheese talk of THM!
 ## Phases
 
 - [[Recon]]
-- [[Enumeration-Exploitation]]
+- [[Labs/cheesectfv10/Enumeration-Exploitation]]
 - [[Foothold]]
 - [[Post-Exploitation]]
 - [[Privilege-Escalation]]
